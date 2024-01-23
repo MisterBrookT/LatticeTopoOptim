@@ -250,8 +250,7 @@ p.seedPart(size=0.4, deviationFactor=0.1, minSizeFactor=0.1)
 p.generateMesh()
 
 #使用我们收集的材料应力应变曲线数据来材料属性校准
-mdb.models['Model-1'].Calibration(name='Calibration-1')
-mdb.models['Model-1'].calibrations['Calibration-1'].DataSet(name='DataSet-1')
+mdb.models['Model-1'].Calibration(name='Calibration-1')db.models['Model-1'].calibrations['Calibration-1'].DataSet(name='DataSet-1')
 mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1'].setValues(
     data=((0.0, 2.3), (0.01135, 108.6), (0.02246, 214.9), (0.03454, 329.67356), 
     (0.04704, 442.25685), (0.04954, 462.55637), (0.05204, 480.89028), (0.05454, 
@@ -265,7 +264,91 @@ mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1'].setVal
     600.25708), (0.10954, 600.29864), (0.11204, 600.38176), (0.11454, 
     600.54116), (0.11704, 600.66816)), type='Stress/Strain', form='NOMINAL')
 
+#创建材料和校准曲线
+mdb.models['Model-1'].calibrations['Calibration-1'].Behavior(name='Behavior-1', 
+    typeName='ElasPlasIsoBehavior')
+mdb.models['Model-1'].Material(name='Material-1')
+
+#校准曲线Behavior-1
+mdb.models['Model-1'].calibrations['Calibration-1'].behaviors['Behavior-1'].setValues(
+    ds1Name='DataSet-1', ultimatePoint=(0.10461, 600.07), yieldPoint=(0.04508, 
+    425.496), plasticPoints=((0.04508, 425.4958), (0.04704, 442.25685), (
+    0.0488038084388, 456.630225808), (0.0494082791213, 461.617207314), (
+    0.0494756345736, 462.156160684), (0.0496249703757, 463.160801483), (
+    0.0501984807037, 467.361953195), (0.0510479891517, 473.624709314), (
+    0.0519750765895, 480.418085727), (0.0528165853342, 486.474416416), (
+    0.0535848019753, 491.836181548), (0.0543464733266, 496.952548012), (
+    0.0551621688248, 502.23047206), (0.0560393697123, 507.714061296), (
+    0.0569585681013, 513.26295728), (0.0579045879652, 518.759024942), (
+    0.0588858904793, 524.207280916), (0.0599190513072, 529.652181919), (
+    0.0610433378876, 535.114696231), (0.0623304463972, 540.581874009), (
+    0.0637931886748, 546.044329314), (0.0653151904696, 551.505902423), (
+    0.0668340845406, 556.96859698), (0.0683893990183, 562.431154918), (
+    0.0702173419946, 567.893556761), (0.0725425524938, 573.356035058), (
+    0.0752373457279, 578.818498149), (0.0787986247469, 584.280963583), (
+    0.0835429031086, 589.743427737), (0.0913144713181, 595.20588647), (0.11704, 
+    600.66816)), plasticPointsRange=(100, 71, 100), ds2Name='DataSet-1', 
+    elasticModulus=9438.68, PoissonsRatio=0.3)
+
 #绘制应力应变曲线
+calibPlot = session.xyPlots['DataSet-1']
+calibPlot.title.setValues(useDefault=True)
+ch = calibPlot.charts.values()[0]
+ds = mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1']
+cxy = session.XYData(name='DataSet-1', data=ds.data, sourceDescription='Data')
+cu = session.Curve(cxy)
+ch.setValues(curvesToPlot=(cu, ), appendMode=False)
+cu.lineStyle.setValues(show=True)
+cu.symbolStyle.setValues(show=False)
+xTitle = "Strain"
+yTitle = "Stress"
+ch.axes1[0].axisData.setValues(useSystemTitle=False, title=xTitle)
+ch.axes2[0].axisData.setValues(useSystemTitle=False, title=yTitle)
+session.viewports[session.currentViewportName].setValues(
+    displayedObject=calibPlot)
+
+#曲线上ultimate
+calibPlot = session.xyPlots['DataSet-1']
+calibPlot.title.setValues(useDefault=True)
+ch = calibPlot.charts.values()[0]
+cxy = session.XYData(name='DataSet-1-UltimatePt', data=((0.10461, 600.07), ), 
+    sourceDescription='Data')
+cu = session.Curve(cxy)
+ch.setValues(curvesToPlot=(cu, ), appendMode=True)
+cu.lineStyle.setValues(show=False)
+cu.symbolStyle.setValues(show=True, marker=FILLED_TRI, color="Red")
+cu.symbolStyle.setValues(size=3.0)
+session.viewports[session.currentViewportName].setValues(
+    displayedObject=calibPlot)
+
+#yieldpt曲线
+calibPlot = session.xyPlots['DataSet-1']
+calibPlot.title.setValues(useDefault=True)
+ch = calibPlot.charts.values()[0]
+cxy = session.XYData(name='DataSet-1-YieldPt', data=((0.04508, 425.496), ), 
+    sourceDescription='Data')
+cu = session.Curve(cxy)
+ch.setValues(curvesToPlot=(cu, ), appendMode=True)
+cu.lineStyle.setValues(show=False)
+cu.symbolStyle.setValues(show=True, marker=FILLED_CIRCLE, color="Blue")
+cu.symbolStyle.setValues(size=3.0)
+session.viewports[session.currentViewportName].setValues(
+    displayedObject=calibPlot)
+
+#elasticmodulus 曲线
+calibPlot = session.xyPlots['DataSet-1']
+calibPlot.title.setValues(useDefault=True)
+ch = calibPlot.charts.values()[0]
+cxy = session.XYData(name='DataSet-1-ElasticModulus', data=((0.0, 0.0), (
+    0.04508, 425.496)), sourceDescription='Data')
+cu = session.Curve(cxy)
+ch.setValues(curvesToPlot=(cu, ), appendMode=True)
+cu.lineStyle.setValues(show=True)
+cu.symbolStyle.setValues(show=False)
+session.viewports[session.currentViewportName].setValues(
+    displayedObject=calibPlot)
+
+#plasticpt 曲线
 calibPlot = session.xyPlots['DataSet-1']
 calibPlot.title.setValues(useDefault=True)
 ch = calibPlot.charts.values()[0]
@@ -290,10 +373,6 @@ ch.setValues(curvesToPlot=(cu, ), appendMode=True)
 cu.lineStyle.setValues(show=False)
 cu.symbolStyle.setValues(show=True, marker=HOLLOW_CIRCLE, color="Brown")
 cu.symbolStyle.setValues(size=2.0)
-xTitle = "Strain"
-yTitle = "Stress"
-ch.axes1[0].axisData.setValues(useSystemTitle=False, title=xTitle)
-ch.axes2[0].axisData.setValues(useSystemTitle=False, title=yTitle)
 session.viewports[session.currentViewportName].setValues(
     displayedObject=calibPlot)
 

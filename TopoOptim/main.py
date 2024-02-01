@@ -11,20 +11,20 @@ class TopoOptim:
     @property
     def configspace(self) -> ConfigurationSpace:
         
-        # TODO: define the parameters: the diameter of outer and inter
+        # TODO: define the parameters: the diameter of outer and inner
         cs = ConfigurationSpace(seed=0)
         outer = Float("outer", (-5, 5), default=1)
-        inter = Float("inter", (-10, 10), default=1)
-        cs.add_hyperparameters([outer, inter])
+        inner = Float("inner", (-10, 10), default=1)
+        cs.add_hyperparameters([outer, inner])
 
         return cs
 
     def train(self, config: Configuration, seed: int = 0) -> float:
         # TODO: here we need to call abaqus for calculation and get the returned result
         outer = config["outer"]
-        inter = config["inter"]
+        inner = config["inner"]
         
-        return outer**2 + inter **2
+        return outer**2 + inner **2
 
 
 

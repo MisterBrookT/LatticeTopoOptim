@@ -1,2 +1,4 @@
 # VSCode settings
 .vscode/
+smac3_output
+*.ipynb

@@ -3,9 +3,16 @@ from abaqusConstants import *
 from caeModules import *
 from driverUtils import executeOnCaeStartup
 import os
+import sys
 
-outer = 0.5
-inner = 0.3
+""
+参数获取，注意在abaqus cae中第八位及以后是附加参数
+如os.system("abaqus cae noGUI=test.py -- 0.8 0.3"),此时0.8和0.3分别在8、9位
+""
+inner = float(sys.argv[8])
+outer = float(sys.argv[9])
+
+#建模过程
 #一号杆
 s = mdb.models['Model-1'].ConstrainedSketch(name='__sweep__', sheetSize=200.0)
 g, v, d, c = s.geometry, s.vertices, s.dimensions, s.constraints
@@ -438,5 +445,5 @@ mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
     scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=4, 
     numDomains=4, numGPUs=0)
 #保存以及提交任务
-#os.chdir(r"C:\Users\wh198\Desktop\simulation")
-#mdb.jobs['Job-1'].submit(consistencyChecking=OFF)
+
+mdb.jobs['Job-1'].submit(consistencyChecking=OFF)

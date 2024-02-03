@@ -1,6 +1,6 @@
 import numpy as np
+import subprocess
 from ConfigSpace import Configuration, ConfigurationSpace, Float
-from matplotlib import pyplot as plt
 
 from smac import BlackBoxFacade as BBFacade
 from smac import RunHistory, Scenario
@@ -18,11 +18,20 @@ class TopoOptim:
         cs.add_hyperparameters([outer, inner])
 
         return cs
-
+    
+    
+    # here we need to call abaqus for calculation and get the returned result
     def train(self, config: Configuration, seed: int = 0) -> float:
-        # TODO: here we need to call abaqus for calculation and get the returned result
+        
         outer = config["outer"]
         inner = config["inner"]
+
+        # TODO： 执行abaqus命令, 这里只是1个example
+        command = "abq cae nogui=fcc.py 0.3 0.5"
+        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        
+        #TODO: 从obd拿到结果：
+        
         
         return outer**2 + inner **2
 

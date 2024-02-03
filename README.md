@@ -19,12 +19,14 @@ abaqus提供了一系列abaqus驱动命令以供在外部访问abaqus，如下�
         [guiNoRecord] 禁用 GUI 录制模式。
 
 我们可以使用在py中使用命令行执行上述abaqus命令，下面是一个简单的例子：
+
     import os
     a = os.system("abaqus cae noGUI=test.py -- 0.8 0.3")
 
 上述例子完成在外部编辑器调起abaqus，执行一个test.py的脚本  并在语句后面附加两个参数0.8和0.3，这将被cae编译器忽视，但可以在test.py内部被读取。
 
 这里简单说明一点，通过使用两个'-'符号完成的参数附加，可以通过sys.argv读取，但在abaqus中，附加的参数将在第八位以后，一个完整的文件信息是
+
     ['C:\\ABAQUS\\6.13-2SE\\code\\bin\\ABQcaeK.exe', '-cae', '-noGUI', '-lmlog', 'ON', '-tmpdir', 'C:\\Windows\\TEMP','0.8','0.3']
 
 ## Reference

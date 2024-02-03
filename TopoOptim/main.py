@@ -27,8 +27,8 @@ class TopoOptim:
         inner = config["inner"]
 
         # TODO： 执行abaqus命令, 这里只是1个example
-        command = "abq cae nogui=fcc.py 0.3 0.5"
-        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        # command = "abq cae nogui=fcc.py 0.3 0.5"
+        # result = subprocess.run(command, capture_output=True, text=True, shell=True)
         
         #TODO: 从obd拿到结果：
         

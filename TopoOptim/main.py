@@ -25,27 +25,32 @@ class TopoOptim:
         
         outer = config["outer"]
         inner = config["inner"]
+        path_odb = "xxx.odb"
+        # 执行abaqus命令
+        # TODO： 把odb文件的路径作为第三个参数后,fcc_job_commit.py中的 odb文件路径需要修改
+        command = ["abqus","cae","nogui=fcc_job_commit.py" ,"--", inner, outer, path_odb]
+        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        
+        # TODO:  同上，看看需不需要更改fcc_postprocess.py文件
+        command = ["abaqus","cae","nogui=fcc_postprocess.py","--", path_odb]
+        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        x_test = None
+        max_ave_s = None
+        with open('output.txt', 'r') as file:
+           for line in file:
+               line = line.strip()
+               if line.startswith("Max Ave E:"):
+                   x_test = float(line.split(":")[1].strip())
+               elif line.startswith("Max Ave S:"):
+                   max_ave_s = float(line.split(":")[1].strip())
 
-        # TODO： 执行abaqus命令, 这里只是1个example
-        # command = ["abqus","cae","nogui=fcc.py" ,"--","0.3","0.5"]
-        # result = subprocess.run(command, capture_output=True, text=True, shell=True)
-        
-        # TODO: 从目标obd拿到结果，odbfile会从odb文件中取出数据并写入output.txt：
-        # command = ["abaqus","cae","nogui=odbfile.py","--","path of odb",]
-        # result = subprocess.run(command, capture_output=True, text=True, shell=True)
-        # x_test = None
-        # max_ave_s = None
-        # with open('output.txt', 'r') as file:
-        #    for line in file:
-        #        line = line.strip()
-        #        if line.startswith("Max Ave E:"):
-        #            x_test = float(line.split(":")[1].strip())
-        #        elif line.startswith("Max Ave S:"):
-        #            max_ave_s = float(line.split(":")[1].strip())
-        # import os
-        # os.remove('output.txt')
-        
-        return outer**2 + inner **2
+        if max_ave_s is None:
+            raise ValueError("max_ave_s should not be [None]")
+        return max_ave_s
+
+    # TODO: Maybe we need to use a simple example for running before we really run fcc lattice.
+    def test() -> None:
+        pass
 
 
 

@@ -27,11 +27,23 @@ class TopoOptim:
         inner = config["inner"]
 
         # TODO： 执行abaqus命令, 这里只是1个example
-        # command = "abq cae nogui=fcc.py -- 0.3 0.5"
+        # command = ["abqus","cae","nogui=fcc.py" ,"--","0.3","0.5"]
         # result = subprocess.run(command, capture_output=True, text=True, shell=True)
         
-        #TODO: 从obd拿到结果：
-        
+        # TODO: 从目标obd拿到结果，odbfile会从odb文件中取出数据并写入output.txt：
+        # command = ["abaqus","cae","nogui=odbfile.py","--","path of odb",]
+        # result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        # x_test = None
+        # max_ave_s = None
+        # with open('output.txt', 'r') as file:
+        #    for line in file:
+        #        line = line.strip()
+        #        if line.startswith("Max Ave E:"):
+        #            x_test = float(line.split(":")[1].strip())
+        #        elif line.startswith("Max Ave S:"):
+        #            max_ave_s = float(line.split(":")[1].strip())
+        # import os
+        # os.remove('output.txt')
         
         return outer**2 + inner **2
 

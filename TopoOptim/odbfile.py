@@ -47,5 +47,7 @@ for i in range(len(frame)):
 strian_stress=tuple(strian_stress)
 x_test = max(strian_stress, key=lambda x: x[1])[0]
 max_ave_s = max(strian_stress, key=lambda x: x[1])[1]
-print(x_test)
-print(max_ave_s)
+
+with open('output.txt', 'w') as f:
+    f.write('Max Ave E: {}\n'.format(x_test))
+    f.write('Max Ave S: {}\n'.format(max_ave_s))

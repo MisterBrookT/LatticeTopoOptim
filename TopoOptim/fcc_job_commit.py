@@ -5,12 +5,13 @@ from driverUtils import executeOnCaeStartup
 import os
 import sys
 
-""
+"""
 参数获取，注意在abaqus cae中第八位及以后是附加参数
 如os.system("abaqus cae noGUI=test.py -- 0.8 0.3"),此时0.8和0.3分别在8、9位
-""
+"""
 inner = float(sys.argv[8])
 outer = float(sys.argv[9])
+jobpath = sys.argv[10].split('.')[0]
 
 #建模过程
 #一号杆
@@ -437,13 +438,13 @@ mdb.models['Model-1'].DisplacementBC(name='BC-2', createStepName='Step-1',
     fieldName='', localCsys=None)
 
 #设置job任务
-mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS, 
+mdb.Job(name=jobpath, model='Model-1', description='', type=ANALYSIS, 
     atTime=None, waitMinutes=0, waitHours=0, queue=None, memory=90, 
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
-    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=4, 
+    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
     numDomains=4, numGPUs=0)
 #保存以及提交任务
 
-mdb.jobs['Job-1'].submit(consistencyChecking=OFF)
+mdb.jobs[jobpath].submit(consistencyChecking=OFF)

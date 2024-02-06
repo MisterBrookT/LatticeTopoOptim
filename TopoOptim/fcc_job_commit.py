@@ -10,10 +10,10 @@ import sys
 参数获取，注意在abaqus cae中第八位及以后是附加参数
 如os.system("abaqus cae noGUI=test.py -- 0.8 0.3"),此时0.8和0.3分别在8、9位
 """
-inner = 0.3
-outer = 0.5
-jobpath = "abc.odb"
-
+inner = float(sys.argv[8])
+outer = float(sys.argv[9])
+file_path, file_extension = os.path.splitext(sys.argv[10])
+jobpath = file_path
 #建模过程
 #一号杆
 s = mdb.models['Model-1'].ConstrainedSketch(name='__sweep__', sheetSize=200.0)

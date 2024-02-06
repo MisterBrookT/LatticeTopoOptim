@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from abaqus import *
 from abaqusConstants import *
 from caeModules import *
@@ -11,8 +12,8 @@ import sys
 """
 inner = float(sys.argv[8])
 outer = float(sys.argv[9])
-jobpath = sys.argv[10].split('.')[0]
-
+file_path, file_extension = os.path.splitext(sys.argv[10])
+jobpath = file_path
 #建模过程
 #一号杆
 s = mdb.models['Model-1'].ConstrainedSketch(name='__sweep__', sheetSize=200.0)
@@ -258,7 +259,9 @@ p.seedPart(size=0.4, deviationFactor=0.1, minSizeFactor=0.1)
 p.generateMesh()
 
 #使用我们收集的材料应力应变曲线数据来材料属性校准
-mdb.models['Model-1'].Calibration(name='Calibration-1')db.models['Model-1'].calibrations['Calibration-1'].DataSet(name='DataSet-1')
+#修改
+mdb.models['Model-1'].Calibration(name='Calibration-1')
+mdb.models['Model-1'].calibrations['Calibration-1'].DataSet(name='DataSet-1')
 mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1'].setValues(
     data=((0.0, 2.3), (0.01135, 108.6), (0.02246, 214.9), (0.03454, 329.67356), 
     (0.04704, 442.25685), (0.04954, 462.55637), (0.05204, 480.89028), (0.05454, 
@@ -299,7 +302,7 @@ mdb.models['Model-1'].calibrations['Calibration-1'].behaviors['Behavior-1'].setV
     elasticModulus=9438.68, PoissonsRatio=0.3)
 
 #绘制应力应变曲线
-calibPlot = session.xyPlots['DataSet-1']
+calibPlot = session.XYPlot('DataSet-1')
 calibPlot.title.setValues(useDefault=True)
 ch = calibPlot.charts.values()[0]
 ds = mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1']
@@ -412,7 +415,7 @@ a.regenerate()
 mdb.models['Model-1'].StaticStep(name='Step-1', previous='Initial', 
     maxNumInc=10000, initialInc=0.1, maxInc=0.1)
 mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(variables=(
-    'S', 'E'))
+    'S', 'E', 'U', 'RF', 'IVOL'))
 
 """
 设置边界条件：
@@ -436,15 +439,20 @@ mdb.models['Model-1'].DisplacementBC(name='BC-2', createStepName='Step-1',
     region=region, u1=UNSET, u2=UNSET, u3=-10.0, ur1=UNSET, ur2=UNSET, 
     ur3=UNSET, amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, 
     fieldName='', localCsys=None)
+#创建集合
+a = mdb.models['Model-1'].rootAssembly
+f1 = a.instances['Part-3-1'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#0 #80000000 ]', ), )
+a.Set(faces=faces1, name='Set-FCC')
+
 
 #设置job任务
-mdb.Job(name=jobpath, model='Model-1', description='', type=ANALYSIS, 
+mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS, 
     atTime=None, waitMinutes=0, waitHours=0, queue=None, memory=90, 
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
     scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
-    numDomains=4, numGPUs=0)
+    numDomains=20, numGPUs=0)
 #保存以及提交任务
-
 mdb.jobs[jobpath].submit(consistencyChecking=OFF)

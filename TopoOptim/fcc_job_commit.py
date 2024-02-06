@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from abaqus import *
 from abaqusConstants import *
 from caeModules import *
@@ -9,9 +10,9 @@ import sys
 参数获取，注意在abaqus cae中第八位及以后是附加参数
 如os.system("abaqus cae noGUI=test.py -- 0.8 0.3"),此时0.8和0.3分别在8、9位
 """
-inner = float(sys.argv[8])
-outer = float(sys.argv[9])
-jobpath = sys.argv[10].split('.')[0]
+inner = 0.3
+outer = 0.5
+jobpath = "abc.odb"
 
 #建模过程
 #一号杆
@@ -301,7 +302,7 @@ mdb.models['Model-1'].calibrations['Calibration-1'].behaviors['Behavior-1'].setV
     elasticModulus=9438.68, PoissonsRatio=0.3)
 
 #绘制应力应变曲线
-calibPlot = session.xyPlots('DataSet-1')
+calibPlot = session.XYPlot('DataSet-1')
 calibPlot.title.setValues(useDefault=True)
 ch = calibPlot.charts.values()[0]
 ds = mdb.models['Model-1'].calibrations['Calibration-1'].dataSets['DataSet-1']
@@ -413,7 +414,7 @@ a.regenerate()
 """
 mdb.models['Model-1'].StaticStep(name='Step-1', previous='Initial', 
     maxNumInc=10000, initialInc=0.1, maxInc=0.1)
-mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(
+mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(variables=(
     'S', 'E', 'U', 'RF', 'IVOL'))
 
 """
@@ -451,7 +452,7 @@ mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
-    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
+    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=4, 
     numDomains=4, numGPUs=0)
 #保存以及提交任务
 mdb.jobs[jobpath].submit(consistencyChecking=OFF)

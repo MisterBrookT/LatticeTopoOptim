@@ -452,7 +452,7 @@ mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
-    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=4, 
-    numDomains=4, numGPUs=0)
+    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
+    numDomains=20, numGPUs=0)
 #保存以及提交任务
 mdb.jobs[jobpath].submit(consistencyChecking=OFF)

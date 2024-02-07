@@ -13,8 +13,8 @@ class TopoOptim:
         
         # TODO: define the parameters: the diameter of outer and inner
         cs = ConfigurationSpace(seed=0)
-        outer = Float("outer", (-5, 5), default=1)
-        inner = Float("inner", (-10, 10), default=1)
+        outer = Float("outer", (0.5, 0.8), default=0.6)
+        inner = Float("inner", (0.1, 0.4), default=0.2)
         cs.add_hyperparameters([outer, inner])
 
         return cs
@@ -27,12 +27,12 @@ class TopoOptim:
         inner = config["inner"]
         path_odb = "xxx.odb"
         # 执行abaqus命令
-        # TODO： 把odb文件的路径作为第三个参数后,fcc_job_commit.py中的 odb文件路径需要修改
-        command = ["abqus","cae","nogui=fcc_job_commit.py" ,"--", inner, outer, path_odb]
-        result = subprocess.run(command, capture_output=True, text=True, shell=True)
-        
-        # TODO:  同上，看看需不需要更改fcc_postprocess.py文件
-        command = ["abaqus","cae","nogui=fcc_postprocess.py","--", path_odb]
+        command = f"abq cae nogui=fcc_job_commit.py -- {inner} {outer} {path_odb}"
+        print(command)
+
+        result = subprocess.run(command,  text=True, shell=True)
+        # 执行后处理
+        command = f"abq cae nogui=fcc_postprocess.py -- {path_odb}"
         result = subprocess.run(command, capture_output=True, text=True, shell=True)
         x_test = None
         max_ave_s = None
@@ -46,7 +46,8 @@ class TopoOptim:
 
         if max_ave_s is None:
             raise ValueError("max_ave_s should not be [None]")
-        return max_ave_s
+        return outer+inner
+        # return max_ave_s
 
     # TODO: Maybe we need to use a simple example for running before we really run fcc lattice.
     def test() -> None:
@@ -58,7 +59,7 @@ if __name__ == "__main__":
     model = TopoOptim()
 
     # Scenario object specifying the optimization "environment"
-    scenario = Scenario(model.configspace, deterministic=True, n_trials=100)
+    scenario = Scenario(model.configspace, deterministic=True, n_trials=10)
 
     # Now we use SMAC to find the best hyperparameters
     smac = BBFacade(

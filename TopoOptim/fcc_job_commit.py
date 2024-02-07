@@ -447,12 +447,12 @@ a.Set(faces=faces1, name='Set-FCC')
 
 
 #设置job任务
-mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS, 
+mdb.Job(name=jobpath, model='Model-1', description='', type=ANALYSIS, 
     atTime=None, waitMinutes=0, waitHours=0, queue=None, memory=90, 
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
     scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
-    numDomains=20, numGPUs=0)
+    numDomains=20, numGPUs=1)
 #保存以及提交任务
 mdb.jobs[jobpath].submit(consistencyChecking=OFF)

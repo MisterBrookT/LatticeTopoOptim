@@ -6,6 +6,7 @@ from driverUtils import executeOnCaeStartup
 import os
 import sys
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
 """
 参数获取，注意在abaqus cae中第八位及以后是附加参数
 如os.system("abaqus cae noGUI=test.py -- 0.8 0.3"),此时0.8和0.3分别在8、9位
@@ -452,7 +453,7 @@ mdb.Job(name=jobpath, model='Model-1', description='', type=ANALYSIS,
     memoryUnits=PERCENTAGE, getMemoryFromAnalysis=True, 
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
-    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=20, 
-    numDomains=20, numGPUs=1)
+    scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=40, 
+    numDomains=40, numGPUs=2)
 #保存以及提交任务
 mdb.jobs[jobpath].submit(consistencyChecking=OFF)

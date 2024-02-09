@@ -10,6 +10,8 @@
 #: Executing "onCaeGraphicsStartup()" in the site directory ...
 from abaqus import *
 from abaqusConstants import *
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
 session.Viewport(name='Viewport: 1', origin=(0.0, 0.0), width=142.4375, 
     height=85.3240737915039)
 session.viewports['Viewport: 1'].makeCurrent()
@@ -127,7 +129,7 @@ mdb.Job(name='Job-1', model='Model-1', description='', type=ANALYSIS,
     explicitPrecision=SINGLE, nodalOutputPrecision=SINGLE, echoPrint=OFF, 
     modelPrint=OFF, contactPrint=OFF, historyPrint=OFF, userSubroutine='', 
     scratch='', resultsFormat=ODB, multiprocessingMode=DEFAULT, numCpus=40, 
-    numDomains=40, numGPUs=4)
+    numDomains=40, numGPUs=2)
 mdb.jobs['Job-1'].submit(consistencyChecking=OFF)
 #: The job input file "Job-1.inp" has been submitted for analysis.
 #: Job Job-1: Analysis Input File Processor completed successfully.

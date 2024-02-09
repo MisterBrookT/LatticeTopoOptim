@@ -4,7 +4,7 @@ from abaqusConstants import *
 import visualization
 import xyPlot
 import numpy as np
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import sys
 path = sys.argv[8]
 o1 = session.openOdb(name=path)

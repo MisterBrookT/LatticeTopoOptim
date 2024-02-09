@@ -8,6 +8,8 @@ from smac import RunHistory, Scenario
 
 
 class TopoOptim:
+    call_abaqus = 0
+
     @property
     def configspace(self) -> ConfigurationSpace:
         
@@ -23,17 +25,19 @@ class TopoOptim:
     # here we need to call abaqus for calculation and get the returned result
     def train(self, config: Configuration, seed: int = 0) -> float:
         
-        outer = config["outer"]
-        inner = config["inner"]
-        path_odb = "xxx.odb"
-        # 执行abaqus命令
+        TopoOptim.call_abaqus += 1
+        print(TopoOptim.call_abaqus)
+        outer = round(config["outer"], 3)
+        inner = round(config["inner"], 3)
+        path_odb = f"{TopoOptim.call_abaqus}.odb"
+        # # 执行abaqus命令
         command = f"abq cae nogui=fcc_job_commit.py -- {inner} {outer} {path_odb}"
         print(command)
 
         result = subprocess.run(command,  text=True, shell=True)
-        # 执行后处理
+        # # 执行后处理
         command = f"abq cae nogui=fcc_postprocess.py -- {path_odb}"
-        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        result = subprocess.run(command, text=True, shell=True)
         x_test = None
         max_ave_s = None
         with open('output.txt', 'r') as file:
@@ -57,9 +61,9 @@ class TopoOptim:
 
 if __name__ == "__main__":
     model = TopoOptim()
-
+    
     # Scenario object specifying the optimization "environment"
-    scenario = Scenario(model.configspace, deterministic=True, n_trials=10)
+    scenario = Scenario(model.configspace, deterministic=True, n_trials=20)
 
     # Now we use SMAC to find the best hyperparameters
     smac = BBFacade(

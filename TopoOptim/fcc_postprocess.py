@@ -37,9 +37,9 @@ sum_sv_total = 0
 strian_stress=[]
 
 volumefcc_all = [f.fieldOutputs['IVOL'].values for f in frame]
-stress_all = [f.fieldOutputs['S'].getSubset(region=mdb.elementSets['SET-FCC']).values for f in frame]
+stress_all = [f.fieldOutputs['S'].getSubset(region=mdb.elementSets['Set-up']).values for f in frame]
 strain_all = [f.fieldOutputs['U'].values for f in frame]
-volume_all = [f.fieldOutputs['IVOL'].getSubset(region=mdb.elementSets['SET-FCC']).values for f in frame]
+volume_all = [f.fieldOutputs['IVOL'].getSubset(region=mdb.elementSets['Set-up']).values for f in frame]
 
 print('Finish reading data. Start for-loop\n')
 

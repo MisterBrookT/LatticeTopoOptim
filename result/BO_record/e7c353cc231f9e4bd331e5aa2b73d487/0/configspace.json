@@ -1,0 +1,26 @@
+{
+  "hyperparameters": [
+    {
+      "name": "inner",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.1,
+      "upper": 0.4,
+      "default": 0.2,
+      "q": null
+    },
+    {
+      "name": "outer",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.5,
+      "upper": 0.8,
+      "default": 0.6,
+      "q": null
+    }
+  ],
+  "conditions": [],
+  "forbiddens": [],
+  "python_module_version": "0.6.1",
+  "json_format_version": 0.4
+}

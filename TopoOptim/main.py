@@ -31,7 +31,7 @@ class TopoOptim:
         inner = round(config["inner"], 3)
         path_odb = f"{TopoOptim.call_abaqus}.odb"
         # # 执行abaqus命令
-        command = f"abq cae nogui=fcc_job_commit.py -- {inner} {outer} {path_odb}"
+        command = f"abq cae nogui=fcc_job_commit.py -- {inner} {outer} {path_odb} 0"
         print(command)
 
         result = subprocess.run(command,  text=True, shell=True)
@@ -50,7 +50,7 @@ class TopoOptim:
 
         if max_ave_s is None:
             raise ValueError("max_ave_s should not be [None]")
-        return outer+inner
+        return 1-max_ave_s
         # return max_ave_s
 
     # TODO: Maybe we need to use a simple example for running before we really run fcc lattice.

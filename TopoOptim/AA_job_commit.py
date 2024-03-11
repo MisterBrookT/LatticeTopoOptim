@@ -224,8 +224,8 @@ a1.InstanceFromBooleanMerge(name='Part-M', instances=(a1.instances['Part-B-1'],
 #阵列
 a1 = mdb.models['Model-1'].rootAssembly
 a1.LinearInstancePattern(instanceList=('Part-M-1', ), direction1=(1.0, 0.0, 
-    0.0), direction2=(0.0, 1.0, 0.0), number1=6, number2=4, spacing1=2*l*math.cos(theta)+2*t, 
-    spacing2=2*h-2*l*math.sin(theta))#此处17.26=2*L*cosθ+2*t，24.0=2*h-2*L*sinθ
+    0.0), direction2=(0.0, 1.0, 0.0), number1=6, number2=4, spacing1=2*L*math.cos(theta)+2*t, 
+    spacing2=2*h-2*L*math.sin(theta))#此处17.26=2*L*cosθ+2*t，24.0=2*h-2*L*sinθ
 a1 = mdb.models['Model-1'].rootAssembly
 a1.LinearInstancePattern(instanceList=('Part-M-1', 'Part-M-1-lin-1-2', 
     'Part-M-1-lin-1-3', 'Part-M-1-lin-1-4', 
@@ -239,7 +239,7 @@ a1.LinearInstancePattern(instanceList=('Part-M-1', 'Part-M-1-lin-1-2',
     'Part-M-1-lin-5-3', 'Part-M-1-lin-5-4',
 	'Part-M-1-lin-6-1', 'Part-M-1-lin-6-2', 
     'Part-M-1-lin-6-3', 'Part-M-1-lin-6-4',), direction1=(0.0, 0.0, 1.0), direction2=(0.0, 1.0, 
-    0.0), number1=6, number2=1, spacing1=2*l*math.cos(theta)+2*t, spacing2=2*h-2*l*math.sin(theta))#此处参考上一条
+    0.0), number1=6, number2=1, spacing1=2*L*math.cos(theta)+2*t, spacing2=2*h-2*L*math.sin(theta))#此处参考上一条
 
 #: (mdb.models['Model-1'].rootAssembly.instances['Part-M-1-lin-2-1-1'], mdb.models['Model-1'].rootAssembly.instances['Part-M-1-lin-1-2-lin-2-1'], mdb.models['Model-1'].rootAssembly.instances['Part-M-1-lin-2-2-lin-2-1'], mdb.models['Model-1'].rootAssembly.instances['Part-M-1-lin-2-1-lin-2-1'])
 a = mdb.models['Model-1'].rootAssembly
@@ -379,7 +379,7 @@ s = mdb.models['Model-1'].ConstrainedSketch(name='__profile__',
     sheetSize=200.0)
 g, v, d, c = s.geometry, s.vertices, s.dimensions, s.constraints
 s.setPrimaryObject(option=STANDALONE)
-s.rectangle(point1=(0.0, 0.0), point2=(12*(l*math.cos(theta)+t)+t, 12*(l*math.cos(theta)+t)+t))#36.22=4*(L*cosθ+t)+t
+s.rectangle(point1=(0.0, 0.0), point2=(12*(L*math.cos(theta)+t)+t, 12*(L*math.cos(theta)+t)+t))#36.22=4*(L*cosθ+t)+t
 
 p = mdb.models['Model-1'].Part(name='Part-P', dimensionality=THREE_D, 
     type=DEFORMABLE_BODY)
@@ -399,7 +399,7 @@ a.rotate(instanceList=('Part-P-1', ), axisPoint=(0.0, 0.0, 0.0),
     axisDirection=(1.0, 0.0, 0.0), angle=90.0)
 #: The instance Part-P-1 was rotated by 90. degrees about the axis defined by the point 0., 0., 0. and the vector 1., 0., 0.
 a = mdb.models['Model-1'].rootAssembly
-a.translate(instanceList=('Part-P-1', ), vector=(-(l*math.cos(theta)+3.0/2*t), -h/2, -(l*math.cos(theta)+3.0/2*t)))#此处#9.48=L*cosθ+t+t/2，#-8.0=h/2
+a.translate(instanceList=('Part-P-1', ), vector=(-(L*math.cos(theta)+3.0/2*t), -h/2, -(L*math.cos(theta)+3.0/2*t)))#此处#9.48=L*cosθ+t+t/2，#-8.0=h/2
 #: The instance Part-P-1 was translated by -9.48, -8., -9.48 with respect to the assembly coordinate system
 
 a = mdb.models['Model-1'].rootAssembly
@@ -410,7 +410,7 @@ a.rotate(instanceList=('Part-P-2', ), axisPoint=(0.0, 0.0, 0.0),
     axisDirection=(1.0, 0.0, 0.0), angle=90.0)
 #: The instance Part-P-2 was rotated by 90. degrees about the axis defined by the point 0., 0., 0. and the vector 1., 0., 0.
 a = mdb.models['Model-1'].rootAssembly
-a.translate(instanceList=('Part-P-2', ), vector=(-(l*math.cos(theta)+3.0/2*t), 8*h-8*l*math.sin(theta)-h/2, -(l*math.cos(theta)+3.0/2*t)))#此处#9.48=L*cosθ+t+t/2，#40.0=4*h-4*L*sinθ-h/2
+a.translate(instanceList=('Part-P-2', ), vector=(-(L*math.cos(theta)+3.0/2*t), 8*h-8*L*math.sin(theta)-h/2, -(L*math.cos(theta)+3.0/2*t)))#此处#9.48=L*cosθ+t+t/2，#40.0=4*h-4*L*sinθ-h/2
 #: The instance Part-P-2 was translated by -9.48, 40., -9.48 with respect to the assembly coordinate system
 
 a = mdb.models['Model-1'].rootAssembly
@@ -421,58 +421,50 @@ a.InstanceFromBooleanMerge(name='Part-ME', instances=(a.instances['Part-MT-1'],
 
 #材料属性
 mdb.models['Model-1'].Material(name='Material-1')
-mdb.models['Model-1'].materials['Material-1'].Elastic(table=((31.4891, 0.48), ))
-mdb.models['Model-1'].materials['Material-1'].Plastic(table=((0.64773, 0.0), (
-    0.713450292, 0.00122763932041564), (0.74435241042, 0.00160222579439244), (
-    0.769668732566, 0.00190130243577563), (0.792799660682, 
-    0.00220893481767079), (0.816953393855, 0.00260329737531577), (
-    0.842902507842, 0.00308791127921607), (0.869747041863, 
-    0.00361503348687634), (0.896566056284, 0.00413664520770165), (
-    0.922905057481, 0.0046335228437098), (0.948919625346, 0.00512410457115265), 
-    (0.974806531513, 0.00562937146317935), (1.00075421697, 0.0061692289289364), 
-    (1.02682237457, 0.00674695826245644), (1.0529694486, 0.00735276741167671), 
-    (1.0791511523, 0.00797651169295054), (1.10532331238, 0.00860808028796209), 
-    (1.13145944295, 0.00924264168156793), (1.15756977634, 0.0098863239531526), 
-    (1.18366911381, 0.0105466189009961), (1.2097717154, 0.0112316763541133), (
-    1.23588104128, 0.0119627778485139), (1.26199059454, 0.0127733117525031), (
-    1.28809350605, 0.0136971190634845), (1.31418427999, 0.0147599382315273), (
-    1.34026386009, 0.0159495151869786), (1.3663350759, 0.0172424694356604), (
-    1.39240149703, 0.0186023430185942), (1.41846938072, 0.0199451770389797), (
-    1.44454559064, 0.021176281017207), (1.47063375188, 0.0222464304102178), (
-    1.49672830499, 0.0232353412116808), (1.52282207353, 0.0242454302432496), (
-    1.54890787753, 0.0253757718206798), (1.57497850672, 0.0266967346495651), (
-    1.60102673542, 0.0282640693752746), (1.62704682646, 0.0301191685938348), (
-    1.65305424529, 0.03210057840073), (1.67908024771, 0.0338957778717732), (
-    1.70515123723, 0.0352393502264512), (1.73123787469, 0.036406444110175), (
-    1.75727711637, 0.0379990588584645), (1.78322717296, 0.0404205775171019), (
-    1.80913347653, 0.0432586615929003), (1.8350573731, 0.0459505205423338), (
-    1.8610069997, 0.0484165615646725), (1.88696259162, 0.0508305782562205), (
-    1.91291173442, 0.0533026475006058), (1.93886148205, 0.0557738199643922), (
-    1.9648169355, 0.0581990743863349), (1.99076369141, 0.0606909799512353), (
-    2.01668266765, 0.0633991232066904), (2.04255653864, 0.0664313819055027), (
-    2.06837015513, 0.0698439766697178), (2.09412332613, 0.073610192595609), (
-    2.11986792954, 0.077423260019633), (2.14565462351, 0.0809897602928726), (
-    2.17148338644, 0.0843160674252793), (2.19732610787, 0.0875656593603128), (
-    2.22310517854, 0.0911657129768481), (2.2487739093, 0.0953753636711875), (
-    2.27443297955, 0.0996566723675428), (2.30014247006, 0.103671995678658), (
-    2.32575114318, 0.108173609150713), (2.35128687657, 0.113040788668283), (
-    2.37696883844, 0.117206624394988), (2.40272242286, 0.121005004222892), (
-    2.42828679742, 0.125659634693233), (2.45362365759, 0.131368960339763), (
-    2.47898179852, 0.137006860458758), (2.50441583242, 0.142306171760135), (
-    2.52973443334, 0.148088222771045), (2.55485766547, 0.15458904194066), (
-    2.57985893428, 0.161374117291951), (2.60500560338, 0.168067464718225), (
-    2.63013337538, 0.175061293719095), (2.6542568009, 0.183862443743903), (
-    2.6773323174, 0.195246137312133), (2.70071706689, 0.207948801643905), (
-    2.719298246, 0.224755449357587)))
-mdb.models['Model-1'].HomogeneousSolidSection(name='Section-1', 
+mdb.models['Model-1'].materials['Material-1'].Elastic(table=((1000, 0.48), ))
+mdb.models['Model-1'].materials['Material-1'].Plastic(table=((
+    30.84428571, 0.0), (33.97382343, 0.001227639), (35.44535288, 0.001602226),
+    (36.65089203, 0.001901302), (37.75236479, 0.002208935), (38.90254256,
+    0.002603297), (40.13821466, 0.003087911), (41.4165258, 0.003615033), (
+    42.69362173, 0.004136645), (43.94785988, 0.004633523), (45.18664883,
+    0.005124105), (46.41935864, 0.005629371), (47.65496271, 0.006169229), (
+    48.89630355, 0.006746958), (50.14140231, 0.007352767), (51.38815011,
+    0.007976512), (52.63444345, 0.00860808), (53.87902109, 0.009242642), (
+    55.1223703, 0.009886324), (56.3651959, 0.010546619), (57.60817692,
+    0.011231676), (58.85147816, 0.011962778), (60.09479022, 0.012773312), (
+    61.337786, 0.013697119), (69.16759368, 0.014759938), (70.54020316,
+    0.015949515), (71.91237242, 0.017242469), (73.28428932, 0.018602343), (
+    74.6562832, 0.019945177), (76.0287153, 0.021176281), (77.40177641,
+    0.02224643), (78.77517395, 0.023235341), (80.14853019, 0.02424543), (
+    81.52146724, 0.025375772), (82.89360562, 0.026696735), (84.26456502,
+    0.028264069), (85.6340435, 0.030119169), (87.00285502, 0.032100578), (
+    88.37264462, 0.033895778), (89.74480196, 0.03523935), (91.11778288,
+    0.036406444), (92.48826928, 0.037999059), (93.85406173, 0.040420578), (
+    95.2175514, 0.043258662), (96.58196701, 0.045950521), (97.94773683,
+    0.048416562), (99.31382061, 0.050830578), (100.679565, 0.053302648), (
+    102.0453412, 0.05577382), (103.4114177, 0.058199074), (104.7770364,
+    0.06069098), (106.141193, 0.063399123), (107.5029757, 0.066431382), (
+    108.8615871, 0.069843977), (110.2170172, 0.073610193), (111.5719963,
+    0.07742326), (112.9291907, 0.08098976), (114.2885993, 0.084316067), (
+    115.6487425, 0.087565659), (117.0055357, 0.091165713), (118.3565215,
+    0.095375364), (119.7069989, 0.099656672), (121.06013, 0.103671996), (
+    122.4079549, 0.108173609), (123.7519409, 0.113040789), (125.1036231,
+    0.117206624), (126.4590749, 0.121005004), (127.8045683, 0.125659635), (
+    129.1380872, 0.13136896), (130.4727262, 0.13700686), (131.8113596,
+    0.142306172), (133.1439175, 0.148088223), (134.4661929, 0.154589042), (
+    135.7820492, 0.161374117), (137.1055581, 0.168067465), (138.4280724,
+    0.175061294), (139.6977264, 0.183862444), (140.9122272, 0.195246137), (
+    142.1430035, 0.207948802), (143.1209603, 0.224755449), (160.0,
+    0.241555449), (180.0, 0.258355449), (200.0, 0.275155449)))
+mdb.models['Model-1'].HomogeneousSolidSection(name='Section-1',
     material='Material-1', thickness=None)
 p = mdb.models['Model-1'].parts['Part-ME']
 c = p.cells
 cells = c.getSequenceFromMask(mask=('[#1 ]', ), )
 region = regionToolset.Region(cells=cells)
 p = mdb.models['Model-1'].parts['Part-ME']
-p.SectionAssignment(region=region, sectionName='Section-1', offset=0.0, 
-    offsetType=MIDDLE_SURFACE, offsetField='', 
+p.SectionAssignment(region=region, sectionName='Section-1', offset=0.0,
+    offsetType=MIDDLE_SURFACE, offsetField='',
     thicknessAssignment=FROM_SECTION)
 a1 = mdb.models['Model-1'].rootAssembly
 a1.regenerate()
@@ -491,22 +483,42 @@ p = mdb.models['Model-1'].parts['Part-ME']
 c = p.cells
 cells = c.getSequenceFromMask(mask=('[#1 ]', ), )
 pickedRegions =(cells, )
-p.setElementType(regions=pickedRegions, elemTypes=(elemType1, elemType2, 
+p.setElementType(regions=pickedRegions, elemTypes=(elemType1, elemType2,
     elemType3))
 p = mdb.models['Model-1'].parts['Part-ME']
 p.generateMesh()
 
+#创建点间耦合
+a.regenerate()
+a = mdb.models['Model-1'].rootAssembly
+a.ReferencePoint(point=(5*L*math.cos(theta)+5*t, 8*h-8*L*math.sin(theta)-h/2, 5*L*math.cos(theta)+5*t))
+RF_ID = a.features['RP-1'].id
+r1 = a.referencePoints
+refPoints1=(r1[RF_ID], )
+region1=a.Set(referencePoints=refPoints1, name='Set-node')
+a = mdb.models['Model-1'].rootAssembly
+s1 = a.instances['Part-ME-1'].faces
+side1Faces1 = s1.findAt(((5*L*math.cos(theta)+5*t, 8*h-8*L*math.sin(theta)-h/2, 5*L*math.cos(theta)+5*t),))
+region2=a.Surface(side1Faces=side1Faces1, name='Surf-up')
+
 #分析步设置
 a = mdb.models['Model-1'].rootAssembly
-mdb.models['Model-1'].StaticStep(name='Step-1', previous='Initial', 
+mdb.models['Model-1'].StaticStep(name='Step-1', previous='Initial',
     maxNumInc=1000, initialInc=0.1, maxInc=0.2, nlgeom=ON)
 mdb.models['Model-1'].fieldOutputRequests['F-Output-1'].setValues(variables=(
-    'S', 'MISES', 'E', 'U', 'RF', 'ENER', 'ELEN', 'ELEDEN', 'DAMAGEC', 'IVOL'))
+    'S', 'E', 'IVOL'))
+regionDef=mdb.models['Model-1'].rootAssembly.sets['Set-node']
+mdb.models['Model-1'].FieldOutputRequest(name='F-Output-2',
+    createStepName='Step-1', variables=('U', 'RF'), region=regionDef,
+    sectionPoints=DEFAULT, rebar=EXCLUDE)
+
+
+
 
 #加入必要集合
 a = mdb.models['Model-1'].rootAssembly
 f1 = a.instances['Part-ME-1'].faces
-faces1 = f1.findAt(((0,8*h-8*l*math.sin(theta)-h/2,0),))
+faces1 = f1.findAt(((0,8*h-8*L*math.sin(theta)-h/2,0),))
 a.Set(faces=faces1, name='Set-up')
 
 a = mdb.models['Model-1'].rootAssembly
@@ -517,16 +529,19 @@ a.Set(faces=faces1, name='Set-down')
 #边界条件设置
 a = mdb.models['Model-1'].rootAssembly
 region = a.sets['Set-down']
-mdb.models['Model-1'].DisplacementBC(name='BC-1', createStepName='Step-1', 
-    region=region, u1=0.0, u2=0.0, u3=0.0, ur1=UNSET, ur2=UNSET, ur3=UNSET, 
-    amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='', 
+mdb.models['Model-1'].DisplacementBC(name='BC-1', createStepName='Step-1',
+    region=region, u1=0.0, u2=0.0, u3=0.0, ur1=UNSET, ur2=UNSET, ur3=UNSET,
+    amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
     localCsys=None)
+mdb.models['Model-1'].Coupling(name='Constraint-1', controlPoint=region1,
+    surface=region2, influenceRadius=WHOLE_SURFACE, couplingType=KINEMATIC,
+    localCsys=None, u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON)
 a = mdb.models['Model-1'].rootAssembly
-region = a.sets['Set-up']
-mdb.models['Model-1'].DisplacementBC(name='BC-2', createStepName='Step-1', 
-    region=region, u1=UNSET, u2=-40.0, u3=UNSET, ur1=UNSET, ur2=UNSET, 
-    ur3=UNSET, amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, 
-    fieldName='', localCsys=None)
+region = a.sets['Set-node']
+mdb.models['Model-1'].DisplacementBC(name='BC-2', createStepName='Step-1',
+    region=region, u1=0.0, u2=27.77, u3=0.0, ur1=UNSET, ur2=UNSET, ur3=UNSET,
+    amplitude=UNSET, fixed=OFF, distributionType=UNIFORM, fieldName='',
+    localCsys=None)
 
 
 #设置job任务
